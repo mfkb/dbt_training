@@ -44,12 +44,13 @@ final as (
         products.currency,
         orders.quantity,
         sale_dates.sale_date is not null as is_sale_order,
-        nvl(sale_dates.discount_percent, 0) as discount_percent, 
         transactions.cost_per_unit_in_usd,
         transactions.amount_in_usd,
         transactions.tax_in_usd,
         transactions.total_charged_in_usd,
-        orders.created_at
+        orders.created_at,
+        orders.created_at_dt,
+        orders.created_at_est
 
     from orders
 
@@ -63,7 +64,7 @@ final as (
         on orders.customer_id = customers.customer_id
 
     left join sale_dates
-        on date(orders.created_at) = date(sale_dates.sale_date)
+        on orders.created_at_dt = sale_dates.sale_date
 
 )
 
